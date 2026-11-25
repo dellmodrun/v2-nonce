@@ -57,12 +57,10 @@
   .links a { color: var(--muted); text-decoration: underline; cursor: pointer; }
   .links span.dot { color: var(--muted); margin: 0 10px; }
   .fox { display: block; margin: 0 auto 12px; width: 260px; height: auto; mix-blend-mode: screen; }
-  .stats { margin-top: 30px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--muted); }
-  .stats a, .stats button {
-    color: var(--muted); text-decoration: underline; text-decoration-color: var(--line);
-    text-underline-offset: 3px; background: transparent; border: none; padding: 0; font: inherit; cursor: pointer;
-  }
-  .stats .sep { padding: 0 12px; }
+  .stats { margin-top: 30px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
+  .stats a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .stats a:hover, .stats a:focus-visible { color: var(--text); }
+  .stats .sep { margin: 0 10px; }
   .chart-wrap { margin-top: 70px; }
   .chart-outer { width: 100%; display: flex; flex-direction: column; align-items: center; }
   .chart { width: 100%; max-width: 680px; height: auto; display: block; }
@@ -134,10 +132,10 @@
     <div class="name">v2/nonce</div>
   </div>
 
-  <div class="stats">
-    market cap: <a href="#">—</a>
+  <div class="stats" aria-label="Project actions">
+    <a href="./app/">launch coin</a>
     <span class="sep">·</span>
-    holders: <button type="button">—</button>
+    <a href="https://pump.fun/" target="_blank" rel="noopener noreferrer">buy v2/nonce</a>
   </div>
 
   <div class="chart-wrap">
@@ -730,20 +728,7 @@ pub enum ErrorCode {
     try {
       const { pair, closes, marketCap, holders } = await loadMarket();
       renderChart(closes);
-      // patch the stats row with real numbers
-      const stats = document.querySelector('.stats');
-      stats.innerHTML =
-        `market cap: <a href="https://solscan.io/token/${CA}" target="_blank">${fmtUsd(marketCap)}</a>` +
-        `<span class="sep">·</span>holders: <a href="https://solscan.io/token/${CA}#holders" target="_blank">${holders}</a>` +
-        `<span class="sep">·</span>liquidity: <span style="color:#fff">${fmtUsd(pair.liquidity?.usd)}</span>` +
-        `<span class="sep">·</span>pool: <a href="https://www.geckoterminal.com/solana/pools/${pair.pairAddress}" target="_blank">${pair.dexId}</a>`;
     } catch (e) {
-      const stats = document.querySelector('.stats');
-      stats.innerHTML =
-        `market cap: <span style="color:#9b9a95">TBA</span>` +
-        `<span class="sep">·</span>holders: <span style="color:#9b9a95">TBA</span>` +
-        `<span class="sep">·</span>liquidity: <span style="color:#9b9a95">TBA</span>` +
-        `<span class="sep">·</span>pool: <span style="color:#9b9a95">TBA</span>`;
       // quiet placeholder: smooth wave + λ hovering near 0.9056
       const N = 256;
       const placeholderPrice = Array.from({length: N}, (_, i) =>

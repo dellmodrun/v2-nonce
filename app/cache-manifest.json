@@ -1,0 +1,86 @@
+[
+  {
+    "url": "https://v2pad.com/assets/index-RIUbksyq.js",
+    "path": "assets/index-RIUbksyq.js",
+    "bytes": 1010965,
+    "type": "text/javascript; charset=utf-8",
+    "encoding": "gzip"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/ebgaramond/v33/SlGUmQSNjdsmc35JDF1K5GR1SDk.woff2",
+    "path": "vendor/fonts/SlGUmQSNjdsmc35JDF1K5GR1SDk.woff2",
+    "bytes": 44336,
+    "type": "font/woff2",
+    "encoding": ""
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/i/productlogos/translate/v14/24px.svg",
+    "path": "vendor/fonts/24px.svg",
+    "bytes": 6225,
+    "type": "image/svg+xml",
+    "encoding": "gzip"
+  },
+  {
+    "url": "https://v2pad.com/",
+    "path": "index.html",
+    "bytes": 1865,
+    "type": "text/html; charset=utf-8",
+    "encoding": "gzip"
+  },
+  {
+    "url": "https://v2pad.com/favicon.png",
+    "path": "favicon.png",
+    "bytes": 1697,
+    "type": "image/png",
+    "encoding": ""
+  },
+  {
+    "url": "https://v2pad.com/~flock.js",
+    "path": "~flock.js",
+    "bytes": 21296,
+    "type": "text/javascript; charset=utf-8",
+    "encoding": "gzip"
+  },
+  {
+    "url": "https://v2pad.com/assets/index-DUxX8Fgw.css",
+    "path": "assets/index-DUxX8Fgw.css",
+    "bytes": 70047,
+    "type": "text/css; charset=utf-8",
+    "encoding": "gzip"
+  },
+  {
+    "url": "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap",
+    "path": "vendor/fonts/google-fonts.css",
+    "bytes": 17509,
+    "type": "text/css; charset=utf-8",
+    "encoding": "gzip"
+  },
+  {
+    "url": "https://v2pad.com/__l5e/events.b21a279f52bb8621.js",
+    "path": "__l5e/events.b21a279f52bb8621.js",
+    "bytes": 25568,
+    "type": "application/javascript; charset=utf-8",
+    "encoding": "gzip"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+    "path": "vendor/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+    "bytes": 48256,
+    "type": "font/woff2",
+    "encoding": ""
+  },
+  {
+    "url": "https://gateway.pinata.cloud/ipfs/bafkreihncqyhp5koqfs2pwdtqoo4jkxunbqo62nxidxbuxvhj6u3z2yeua",
+    "path": "vendor/ipfs/bafkreihncqyhp5koqfs2pwdtqoo4jkxunbqo62nxidxbuxvhj6u3z2yeua",
+    "bytes": 2448,
+    "type": "image/webp",
+    "encoding": ""
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+    "path": "vendor/fonts/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+    "bytes": 31432,
+    "type": "font/woff2",
+    "encoding": ""
+  }
+]
