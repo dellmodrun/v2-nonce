@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const root = path.resolve('app');
 const pages = ['index.html', 'launch/index.html', 'registry/index.html', 'bonds/index.html', 'docs/index.html'];
-const image = 'https://dellmodrun.github.io/v2-nonce/v2nonce.png';
+const image = 'https://v2nonce.run/v2nonce.png';
 
 for (const page of pages) {
   const file = path.join(root, page);
