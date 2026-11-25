@@ -13,7 +13,7 @@ v2/nonce links each launched coin to a bounded AI agent. The token meters reques
 
 ## Contract address updates
 
-`main` is the GitHub Pages source. The live contract address is stored as `ca.json` on the separate `ca-live` branch. To publish an address or return to TBA, update only that JSON file on `ca-live` and push the branch. The landing page polls the raw JSON feed every two seconds while visible and refreshes immediately when a tab becomes active. CA changes therefore do not trigger a GitHub Pages rebuild. GitHub raw-file propagation is external and has no fixed latency guarantee.
+`main` is the GitHub Pages source. The live contract address is stored as `ca.json` on the separate `ca-live` branch. To publish an address or return to TBA, update only that JSON file on `ca-live` and push the branch. The landing page reads the fresh GitHub Contents API on load and when a tab becomes active, and polls the raw JSON feed every two seconds while visible. Older cached responses cannot overwrite a newer address. CA changes therefore do not trigger a GitHub Pages rebuild. GitHub API limits and raw-file caching mean that updates still have no fixed latency guarantee; this is not a true sub-second data service.
 
 Run `python bundle.py` after editing the landing page, then push `main` to publish site changes.
 
