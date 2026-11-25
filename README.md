@@ -1,39 +1,15 @@
 # v2/nonce
 
-a chaos-theoretic market stability protocol on solana — landing page.
+v2/nonce explores a token launch that also starts a bounded AI agent. The agent would take tasks, earn revenue, pay for CUDA GPU compute, and pause when its operating budget runs out. Helius Solana Privacy Rings are being evaluated for confidential treasury payments.
 
-## structure
+The current site is a narrative and interface prototype. Its agent runtime, compute billing, and Privacy Rings integration are not live. The imported app retains parts of an earlier coin-launch flow; its form is not a working agent launcher.
 
-```
-index.html              dev version, references external assets
-fonts/                  EB Garamond + JetBrains Mono (woff2, self-hosted)
-v2nonce.png             hero image and tab icon
-dist/index.html         single-file bundle (all assets base64-inlined)
-bundle.py               script that rebuilds dist/index.html from sources
-```
+## Site structure
 
-## local dev
+- `index.html`: landing page and written concept
+- `scripts/runway-chart.js`: explicitly illustrative agent runway chart
+- `app/`: imported launch app and its current routes
+- `dist/index.html`: self-contained landing page bundle
+- `bundle.py`: regenerates the bundle from the landing page assets
 
-```
-python -m http.server 8000
-```
-
-then open http://localhost:8000
-
-## rebuilding the standalone bundle
-
-after editing `index.html` or any asset:
-
-```
-python bundle.py
-```
-
-this regenerates `dist/index.html` with every external resource inlined as a
-base64 data uri — a single file you can drop into any static host or open
-directly with `file://`.
-
-## deploy
-
-push to any static host. for github pages, point pages at the repo root and
-the dev version works directly; for a hosted single-file deploy, serve
-`dist/index.html` as the root document.
+Run `python bundle.py` after editing the landing page, then push the repository root to GitHub Pages.

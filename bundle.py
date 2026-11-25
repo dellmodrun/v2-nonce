@@ -34,6 +34,12 @@ for url, (mime, path) in assets.items():
     print(f"  {url:40s} -> inlined ({before - after} replacements, {path.stat().st_size:>7} bytes raw)")
     replacements += before - after
 
+chart_tag = '<script src="./scripts/runway-chart.js"></script>'
+if chart_tag not in html:
+    raise RuntimeError('runway chart script reference not found')
+chart_source = (ROOT / 'scripts/runway-chart.js').read_text(encoding='utf-8')
+html = html.replace(chart_tag, '<script>\n' + chart_source + '\n</script>')
+
 OUT.write_text(html, encoding="utf-8")
 print()
 print(f"total: {replacements} URLs inlined")
