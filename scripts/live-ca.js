@@ -86,6 +86,7 @@
   refresh();
   refreshFresh();
   setInterval(refresh, 2000);
+  setInterval(refreshFresh, 90000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { refresh(); refreshFresh(); } });
   window.addEventListener('online', refresh);
   window.addEventListener('focus', refreshFresh);
