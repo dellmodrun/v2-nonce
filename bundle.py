@@ -34,11 +34,12 @@ for url, (mime, path) in assets.items():
     print(f"  {url:40s} -> inlined ({before - after} replacements, {path.stat().st_size:>7} bytes raw)")
     replacements += before - after
 
-chart_tag = '<script src="./scripts/runway-chart.js"></script>'
-if chart_tag not in html:
-    raise RuntimeError('runway chart script reference not found')
-chart_source = (ROOT / 'scripts/runway-chart.js').read_text(encoding='utf-8')
-html = html.replace(chart_tag, '<script>\n' + chart_source + '\n</script>')
+for script_name in ('live-ca.js', 'runway-chart.js'):
+    script_tag = f'<script src="./scripts/{script_name}"></script>'
+    if script_tag not in html:
+        raise RuntimeError(f'{script_name} reference not found')
+    script_source = (ROOT / 'scripts' / script_name).read_text(encoding='utf-8')
+    html = html.replace(script_tag, '<script>\n' + script_source + '\n</script>')
 
 OUT.write_text(html, encoding="utf-8")
 print()

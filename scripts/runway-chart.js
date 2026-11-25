@@ -63,18 +63,18 @@
   const baseline = yNet(0);
 
   let svg = '';
-  svg += `<text x="18" y="${(TOP1 + BOT1) / 2}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 18 ${(TOP1 + BOT1) / 2})">runway (units)</text>`;
-  [[topMin, topMin.toFixed(1)], [(topMin + topMax) / 2, ((topMin + topMax) / 2).toFixed(1)], [topMax, topMax.toFixed(1)]].forEach(([value, label]) => {
+  svg += `<text x="18" y="${(TOP1 + BOT1) / 2}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 18 ${(TOP1 + BOT1) / 2})">compute runway</text>`;
+  [[topMin, 'low'], [(topMin + topMax) / 2, 'mid'], [topMax, 'high']].forEach(([value, label]) => {
     svg += `<text x="54" y="${yBalance(value) + 3}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">${label}</text>`;
   });
   svg += `<line x1="${ML}" y1="${yBalance((topMin + topMax) / 2)}" x2="${W - MR}" y2="${yBalance((topMin + topMax) / 2)}" stroke="#3d3d3a" stroke-width="1" stroke-dasharray="2 4"/>`;
   svg += `<polyline points="${line(balance, yBalance)}" fill="none" stroke="#b8b5ac" stroke-width="1"/>`;
-  svg += `<text x="${W - MR - 2}" y="20" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">mode: illustration</text>`;
-  svg += `<text x="${W - MR - 2}" y="34" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">jobs in / GPU out</text>`;
-  svg += `<text x="${W - MR - 2}" y="48" fill="#ffffff" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">runway: ${budget.toFixed(2)} units</text>`;
+  svg += `<text x="${W - MR - 2}" y="20" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">agent economics</text>`;
+  svg += `<text x="${W - MR - 2}" y="34" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">work earns / GPU spends</text>`;
+  svg += `<text x="${W - MR - 2}" y="48" fill="#ffffff" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">runway = balance after costs</text>`;
   svg += `<line x1="${ML}" y1="247.5" x2="${W - MR}" y2="247.5" stroke="#3d3d3a" stroke-width="1"/>`;
-  svg += `<text x="18" y="${(TOP2 + BOT2) / 2}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 18 ${(TOP2 + BOT2) / 2})">net / cycle</text>`;
-  [[netMin, netMin.toFixed(2)], [0, '0.00'], [netMax, netMax.toFixed(2)]].forEach(([value, label]) => {
+  svg += `<text x="18" y="${(TOP2 + BOT2) / 2}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 18 ${(TOP2 + BOT2) / 2})">net flow</text>`;
+  [[netMin, 'cost'], [0, 'even'], [netMax, 'earn']].forEach(([value, label]) => {
     svg += `<text x="54" y="${yNet(value) + 3}" fill="${value === 0 ? '#ffffff' : '#9b9a95'}" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">${label}</text>`;
   });
   svg += `<line x1="${ML}" y1="${baseline}" x2="${W - MR}" y2="${baseline}" stroke="#ffffff" stroke-width="1" opacity="0.4"/>`;
@@ -89,6 +89,6 @@
     svg += `<line x1="${x}" y1="${BOT2}" x2="${x}" y2="${BOT2 + 4}" stroke="#3d3d3a" stroke-width="1"/>`;
     svg += `<text x="${x}" y="${BOT2 + 16}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">${k}</text>`;
   });
-  svg += `<text x="${(ML + W - MR) / 2}" y="${BOT2 + 32}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">agent cycle (illustrative)</text>`;
+  svg += `<text x="${(ML + W - MR) / 2}" y="${BOT2 + 32}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">agent lifecycle</text>`;
   document.getElementById('chart').innerHTML = svg;
 })();

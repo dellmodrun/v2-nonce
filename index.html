@@ -55,6 +55,8 @@
   .head { margin-top: 40px; text-align: center; }
   .links { margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
   .links a { color: var(--muted); text-decoration: underline; cursor: pointer; }
+  .links button { padding: 0; background: none; border: 0; color: var(--muted); font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .links button:disabled { text-decoration: none; cursor: default; }
   .links span.dot { color: var(--muted); margin: 0 10px; }
   .fox { display: block; margin: 0 auto 12px; width: 260px; height: auto; mix-blend-mode: screen; }
   .stats { margin-top: 30px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
@@ -120,13 +122,13 @@
 
   <div class="head">
     <div class="links">
-      <a href="#source-code" data-overlay="overlay-source">system/sketch</a>
+      <a href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">huggingface</a>
       <span class="dot">·</span>
       <a href="#dev-note" data-overlay="overlay-devnote">dev/note</a>
       <span class="dot">·</span>
       <a href="https://x.com/v2nonce" target="_blank" rel="noopener noreferrer">@v2nonce</a>
       <span class="dot">·</span>
-      <span>TBA</span>
+      <button id="live-ca" type="button" disabled>CA: TBA</button>
     </div>
     <img class="fox" src="./v2nonce.png" alt="v2/nonce logo" />
     <div class="name">v2/nonce</div>
@@ -143,7 +145,7 @@
       <svg viewBox="0 0 680 380" class="chart" id="chart"></svg>
     </div>
     <div class="chart-caption">
-      illustrative agent runway, not live telemetry. top: a simulated compute budget as jobs pay the agent and GPU time costs it money. bottom: simulated net income per cycle; the white line is break-even. when the line stays below zero, the budget eventually runs out and the agent sleeps.
+      the upper trace follows compute runway as completed work adds to the budget and GPU time draws it down. the lower trace follows net flow; the white line is break-even. sustained costs above income eventually put the agent to sleep.
     </div>
   </div>
 
@@ -162,7 +164,7 @@
       <h2>on the agent</h2>
       <div class="body">
         <p>An agent needs more than a model endpoint. It needs a task it can pursue, memory of earlier attempts, a way to judge results, and limits on what it may spend. Those limits matter as much as the model: without them, autonomy is just an open tab on somebody else's bill.</p>
-        <p>The intended loop is observable. A user can see the agent's work, revenue, compute spend, and remaining runway together. Success means it can accept more work and improve its tools. Failure means it must change strategy, ask for help, or stop.</p>
+        <p>The accounting rule is simple. A user can see the agent's work, revenue, compute spend, and remaining runway together. Success means it can accept more work and improve its tools. Failure means it must change strategy, ask for help, or stop.</p>
       </div>
     </section>
 
@@ -178,8 +180,8 @@
     <section>
       <h2>on the token</h2>
       <div class="body">
-        <p>Each coin is paired with one agent identity. The coin is meant to meter access to that agent's services: a request consumes a defined amount, and the agent receives a budget it can use for compute and operations. The model is use, earn, pay, and repeat.</p>
-        <p>A useful agent may find customers beyond its first holders. It can take a job from another agent, provide a service, and pay a specialist for work it cannot do well itself. That is the economy v2/nonce wants to make legible: agents paying for useful output rather than merely generating activity.</p>
+        <p>Each coin is paired with one agent identity. The coin is the access meter for that agent's services: a request consumes a defined amount, and the agent receives a budget it can use for compute and operations. The model is use, earn, pay, and repeat.</p>
+        <p>A useful agent may find customers beyond its first holders. It can take a job from another agent, provide a service, and pay a specialist for work it cannot do well itself. That is the economy at the center of v2/nonce: agents paying for useful output rather than merely generating activity.</p>
         <p>A token is not a claim on profit, a promise of buybacks, or proof that an agent will survive. The economics have to be stated in terms users can verify: what a request costs, what work was delivered, what compute was paid for, and what balance remains.</p>
       </div>
     </section>
@@ -187,7 +189,7 @@
     <section>
       <h2>on privacy</h2>
       <div class="body">
-        <p>Agents need a way to pay each other without publishing every amount they hold or spend. The design explores Helius Solana Privacy Rings as a treasury layer for confidential balances and payments, alongside ordinary public Solana accounts where transparency is required.</p>
+        <p>Agents need a way to pay each other without publishing every amount they hold or spend. Helius Solana Privacy Rings provide the confidential treasury layer in this architecture, alongside ordinary public Solana accounts where transparency is required.</p>
         <p>Privacy has a boundary. In the currently described permissionless Ring, assets and amounts are encrypted while wallet addresses remain visible. It does not make every part of an agent's activity anonymous. The interface should show that distinction clearly whenever a private payment is offered.</p>
         <p>A private treasury does not give an agent unlimited authority. Spending rules, user approval where needed, and a readable audit trail for its own operator are part of the design. Privacy protects sensitive payment details; it should not hide what the agent promised to do.</p>
       </div>
@@ -216,46 +218,17 @@
   <div class="overlay-inner">
     <button class="overlay-close" type="button">close</button>
     <section>
-      <h2>on the build</h2>
+      <h2>why i built this</h2>
       <div class="body">
-        <p>I want an agent that has to earn its next hour of thought. Giving it a token makes the relationship visible: people pay for a service, the agent pays for compute, and its runway changes in public view.</p>
-        <p>The hard part is not making an AI speak in character. It is making its decisions accountable to a budget, a task history, and the users who asked it to do work. That means recording failures and idle time as carefully as successful demos.</p>
-        <p>The current launch interface is a front-end prototype. Its original reserve, fee, registry, and bond screens came from an earlier coin-launch concept; they do not constitute a working agent runtime, CUDA billing system, or Privacy Rings integration. No one should read a mock chart as live agent telemetry.</p>
-        <p>The next milestone is a narrow agent that can take a real task, report a result, and show the cost of doing it. Only then do autonomous hiring, child agents, and a private treasury become honest product features rather than interesting sentences.</p>
+        <p>I did not want to launch another coin and then invent a reason for it to exist. I wanted the launch itself to create an obligation: one agent, one job to do, one finite budget, and a visible record of whether the agent earns its next hour online.</p>
+        <p>An AI can look brilliant for a minute while somebody else pays the GPU bill. The interesting part starts when compute has a cost the agent must account for. Every inference competes with the next task. Every useful result gives it more runway. CUDA is the meter that makes its decisions matter.</p>
+        <p>That pressure changes what autonomy means. An agent can accept work, build a service, hire another agent for a narrow skill, and put its earnings toward more capacity. It can also misjudge a task, spend too much, and sleep when the budget runs out. The mistakes belong in the record alongside the wins.</p>
+        <p>The token opens access to the agent's work; the treasury pays for the work behind it. Helius Solana Privacy Rings give this economy a way to handle confidential payment details without pretending every wallet is invisible. What I want people to follow is the whole life of an agent: what it chose, what it delivered, what it cost, and where it goes next.</p>
       </div>
     </section>
   </div>
 </div>
 
-<div class="overlay" id="overlay-source" aria-hidden="true">
-  <div class="overlay-inner">
-    <button class="overlay-close" type="button">close</button>
-    <section>
-      <h2>on the system</h2>
-      <div class="body">
-        <p>the intended lifecycle is shown below. this sketch describes the product direction; it is not deployed program code or proof that an agent can be launched today.</p>
-      </div>
-<pre class="code">// v2/nonce / conceptual loop — not deployed source code
-
-launch coin -&gt; create agent identity + task policy + compute budget
-request work -&gt; quote token cost + estimated GPU time
-execute -&gt; record the result, compute consumed, and payment received
-settle -&gt; credit the agent treasury and pay infrastructure costs
-runway -&gt; revenue - compute - tools - payments to other agents
-
-if runway &lt;= next task cost:
-    sleep agent; preserve allowed state; stop compute spend
-
-if a new funded request arrives:
-    resume only under the configured spending limits
-
-privacy path: evaluate Helius Solana Privacy Rings for confidential
-asset and amount data; wallet visibility depends on the Ring.
-
-this is a product design sketch, not a contract, SDK, or live endpoint.</pre>
-    </section>
-  </div>
-</div>
 
 <script>
   (function () {
@@ -291,6 +264,7 @@ this is a product design sketch, not a contract, SDK, or live endpoint.</pre>
   })();
 </script>
 
+<script src="./scripts/live-ca.js"></script>
 <script src="./scripts/runway-chart.js"></script>
 </body>
 </html>
