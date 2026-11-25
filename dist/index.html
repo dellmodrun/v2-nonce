@@ -297,11 +297,39 @@ this is a product design sketch, not a contract, SDK, or live endpoint.</pre>
   const N = 256;
   const balance = [];
   const net = [];
-  let budget = 1.48;
+  const payments = new Float64Array(N);
+  let seed = 0x2a6b9f31;
+  const random = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+  let budget = 1.55;
+  let activeCycles = 0;
+  let nextJob = 9;
 
   for (let i = 0; i < N; i++) {
-    const revenue = (i % 31 === 8 ? 0.23 : 0) + (i % 47 === 28 ? 0.14 : 0);
-    const compute = 0.0105 + 0.003 * (1 + Math.sin(i * 0.09));
+    if (i === nextJob) {
+      const payout = 0.13 + random() * 0.30 + (random() < 0.12 ? 0.12 : 0);
+      const duration = 7 + Math.floor(random() * 18);
+      const weights = Array.from({ length: duration }, (_, k) =>
+        Math.sin(Math.PI * (k + 0.5) / duration) * (0.75 + random() * 0.5));
+      const weightSum = weights.reduce((sum, weight) => sum + weight, 0);
+      weights.forEach((weight, k) => {
+        if (i + k < N) payments[i + k] += payout * weight / weightSum;
+      });
+      const gap = i < 60 ? 15 + random() * 20
+        : i < 120 ? 9 + random() * 17
+          : i < 170 ? 23 + random() * 25
+            : i < 220 ? 8 + random() * 20
+              : 16 + random() * 20;
+      nextJob += Math.round(gap);
+      activeCycles = Math.max(activeCycles, duration);
+    }
+    if (activeCycles === 0 && random() < 0.025) activeCycles = 3 + Math.floor(random() * 9);
+    const compute = 0.0048 + random() * 0.0025
+      + (activeCycles > 0 ? 0.004 + random() * 0.005 : 0);
+    if (activeCycles > 0) activeCycles--;
+    const revenue = payments[i] + random() * 0.002;
     const change = revenue - compute;
     budget = Math.max(0, budget + change);
     balance.push(budget);
@@ -311,29 +339,33 @@ this is a product design sketch, not a contract, SDK, or live endpoint.</pre>
   const W = 680, ML = 60, MR = 20;
   const TOP1 = 20, BOT1 = 235, TOP2 = 252, BOT2 = 345;
   const xAt = i => ML + i / (N - 1) * (W - ML - MR);
-  const topMax = Math.max(1.9, ...balance) * 1.08;
-  const yBalance = value => TOP1 + (1 - value / topMax) * (BOT1 - TOP1);
+  const observedMin = Math.min(...balance), observedMax = Math.max(...balance);
+  const padding = Math.max(0.12, (observedMax - observedMin) * 0.18);
+  const topMin = Math.max(0, observedMin - padding);
+  const topMax = observedMax + padding;
+  const yBalance = value => TOP1 + (1 - (value - topMin) / (topMax - topMin)) * (BOT1 - TOP1);
   const windowed = net.map((_, i) => {
-    const start = Math.max(0, i - 11);
+    const start = Math.max(0, i - 15);
     let total = 0;
     for (let j = start; j <= i; j++) total += net[j];
     return total / (i - start + 1);
   });
-  const netMin = -0.025, netMax = 0.04;
+  const netMin = Math.min(-0.02, ...windowed) * 1.08;
+  const netMax = Math.max(0.025, ...windowed) * 1.08;
   const yNet = value => TOP2 + (1 - (value - netMin) / (netMax - netMin)) * (BOT2 - TOP2);
   const line = (values, y) => values.map((value, i) => `${xAt(i).toFixed(2)},${y(value).toFixed(2)}`).join(' ');
   const baseline = yNet(0);
 
   let svg = '';
   svg += `<text x="18" y="${(TOP1 + BOT1) / 2}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 18 ${(TOP1 + BOT1) / 2})">runway (units)</text>`;
-  [[0, '0'], [topMax / 2, (topMax / 2).toFixed(1)], [topMax, topMax.toFixed(1)]].forEach(([value, label]) => {
+  [[topMin, topMin.toFixed(1)], [(topMin + topMax) / 2, ((topMin + topMax) / 2).toFixed(1)], [topMax, topMax.toFixed(1)]].forEach(([value, label]) => {
     svg += `<text x="54" y="${yBalance(value) + 3}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">${label}</text>`;
   });
-  svg += `<line x1="${ML}" y1="${yBalance(topMax / 2)}" x2="${W - MR}" y2="${yBalance(topMax / 2)}" stroke="#3d3d3a" stroke-width="1" stroke-dasharray="2 4"/>`;
+  svg += `<line x1="${ML}" y1="${yBalance((topMin + topMax) / 2)}" x2="${W - MR}" y2="${yBalance((topMin + topMax) / 2)}" stroke="#3d3d3a" stroke-width="1" stroke-dasharray="2 4"/>`;
   svg += `<polyline points="${line(balance, yBalance)}" fill="none" stroke="#b8b5ac" stroke-width="1"/>`;
-  svg += `<text x="${W - MR - 2}" y="34" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">mode: illustration</text>`;
-  svg += `<text x="${W - MR - 2}" y="48" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">jobs in / GPU out</text>`;
-  svg += `<text x="${W - MR - 2}" y="62" fill="#ffffff" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">runway: ${budget.toFixed(2)} units</text>`;
+  svg += `<text x="${W - MR - 2}" y="20" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">mode: illustration</text>`;
+  svg += `<text x="${W - MR - 2}" y="34" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">jobs in / GPU out</text>`;
+  svg += `<text x="${W - MR - 2}" y="48" fill="#ffffff" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">runway: ${budget.toFixed(2)} units</text>`;
   svg += `<line x1="${ML}" y1="247.5" x2="${W - MR}" y2="247.5" stroke="#3d3d3a" stroke-width="1"/>`;
   svg += `<text x="18" y="${(TOP2 + BOT2) / 2}" fill="#9b9a95" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 18 ${(TOP2 + BOT2) / 2})">net / cycle</text>`;
   [[netMin, netMin.toFixed(2)], [0, '0.00'], [netMax, netMax.toFixed(2)]].forEach(([value, label]) => {
